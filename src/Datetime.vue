@@ -31,7 +31,8 @@
           :auto="auto"
           :week-start="weekStart"
           :flow="flow"
-          :title="title">
+          :title="title"
+          :showTabs="showTabs">
         <template slot="button-cancel__internal" slot-scope="scope">
           <slot name="button-cancel" v-bind:step="scope.step">{{ phrases.cancel }}</slot>
         </template>
@@ -134,6 +135,10 @@ export default {
     },
     title: {
       type: String
+    },
+    showTabs: {
+      type: Boolean,
+      default: false
     }
   },
 

@@ -5,6 +5,14 @@
       <div class="vdatetime-popup__year" @click="showYear" v-if="type !== 'time'">{{ year }}</div>
       <div class="vdatetime-popup__date" @click="showMonth" v-if="type !== 'time'">{{ dateFormatted }}</div>
     </div>
+    <div v-if="showTabs" class="vdatetime-popup__tabs">
+      <div class="vdatetime-popup__tab date" :class="{'active' : step === 'date'}" @click="goDate()">
+       {{ dateTabFormatted }}
+      </div>
+      <div class="vdatetime-popup__tab time" :class="{'active' : step === 'time'}" @click="goTime()">
+      {{ timeTabFromatted }}
+      </div>
+    </div>
     <div class="vdatetime-popup__body">
       <datetime-year-picker
           v-if="step === 'year'"
@@ -122,6 +130,10 @@ export default {
     },
     title: {
       type: String
+    },
+    showTabs: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -183,6 +195,12 @@ export default {
         this.maxDatetime.month === this.month &&
         this.maxDatetime.day === this.day
       ) ? this.maxDatetime.toFormat('HH:mm') : null
+    },
+    timeTabFromatted () {
+      return this.newDatetime.toLocaleString(DateTime.TIME_SIMPLE)
+    },
+    dateTabFormatted () {
+      return this.newDatetime.toFormat('cccc, LLL yy')
     }
   },
 
@@ -265,7 +283,18 @@ export default {
           this.nextStep()
           break
       }
+    },
+
+    goDate () {
+      this.flowManager.diversion('time')
+      this.step = 'date'
+    },
+
+    goTime () {
+      this.flowManager.diversion('end')
+      this.step = 'time'
     }
+
   }
 }
 </script>
@@ -340,5 +369,21 @@ export default {
   &:hover {
     color: #444;
   }
+}
+
+.vdatetime-popup__tabs {
+  width: 100%;
+  display: flex;
+  border-bottom: 1px solid #ccc;
+}
+
+.vdatetime-popup__tab {
+  flex: 1;
+  padding: 20px 10px;
+}
+
+.vdatetime-popup__tab.active {
+  font-weight: bold;
+  border-bottom: 1px solid #000;
 }
 </style>
